@@ -7,7 +7,8 @@
 //
 // It reports per-feature pass/fail, asserts the browser console stays clean, and
 // simulates a page refresh to prove localStorage persistence.
-import { readFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { JSDOM } from 'jsdom'
@@ -27,7 +28,11 @@ async function loadBundle() {
     const scriptUrl = new URL(src, base).href
     const js = await fetch(scriptUrl)
     if (!js.ok) throw new Error(`GET ${scriptUrl} -> HTTP ${js.status}`)
-    return { html, scriptUrl, code: await js.text(), label: base }
+    // Node cannot import an https:// URL, so stage the downloaded bundle locally.
+    const staging = mkdtempSync(path.join(tmpdir(), 'verify-app-'))
+    const file = path.join(staging, 'bundle.mjs')
+    writeFileSync(file, await js.text())
+    return { html, scriptUrl: pathToFileURL(file).href, label: base }
   }
 
   const dir = path.resolve(target)
