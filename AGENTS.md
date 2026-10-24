@@ -11,7 +11,7 @@ reducer and are persisted to `localStorage`.
 - `src/components/` — `TaskInput`, `TaskItem`, `FilterBar`
 - `src/App.tsx`, `src/main.tsx`, `src/index.css`
 - `src/__tests__/` — Vitest suites (reducer, storage, UI integration)
-- `tools/verify-build.mjs` — boots the production bundle in jsdom and drives the real UI
+- `scripts/verify-app.mjs` — boots the production bundle in jsdom and drives the real UI
 
 ## Commands
 
@@ -50,5 +50,5 @@ export NODE_OPTIONS="--require=\"$PWD/tools/dns-patch.cjs\""
 HOME="$PWD" node node_modules/typescript/bin/tsc --noEmit
 HOME="$PWD" node node_modules/vitest/vitest.mjs run
 HOME="$PWD" node node_modules/vite/bin/vite.js build
-node tools/verify-build.mjs
+node scripts/verify-app.mjs
 ```

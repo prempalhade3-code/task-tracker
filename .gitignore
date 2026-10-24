@@ -5,3 +5,8 @@ tools
 *.local
 .DS_Store
 *.log
+
+# Local environment files (never commit credentials)
+.env
+.env.*
+!.env.example
